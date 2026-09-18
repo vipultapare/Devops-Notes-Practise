@@ -28,7 +28,7 @@ jobs:
 
   deploy:
     needs: test
-    runs-on: ubuntu-latest4
+    runs-on: ubuntu-latest
     steps:
      - name: Deploy the Code
        run: echo "Deploy the Code and end"
