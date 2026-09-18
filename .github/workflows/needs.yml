@@ -1,0 +1,34 @@
+name: Needs Workflow
+
+on:
+ push:
+  branches:
+    - main
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    steps:
+     - name: Pull the Code 
+       run: echo "Pulling the code"
+  
+  build:
+    needs: pull
+    runs-on: ubuntu-latest
+    steps: 
+     - name: Build the Code
+       run: echo "Build the code"
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+     - name: Test the Code
+       run: echo "Test the Code"
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest4
+    steps:
+     - name: Deploy the Code
+       run: echo "Deploy the Code"
