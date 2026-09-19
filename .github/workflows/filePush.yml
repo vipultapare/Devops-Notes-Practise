@@ -2,9 +2,9 @@ name: On Particular File Push
 
 on:
   push:
-    branch: main
-    path:
-      - **/*.html
+    branches: main
+    paths:
+      - "**/*.html"
 
 jobs:
   greet:
