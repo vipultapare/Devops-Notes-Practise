@@ -1,0 +1,20 @@
+name: On Particular File Push
+
+on:
+  push:
+    branch: main
+    path:
+      - **/*.html
+
+jobs:
+  greet:
+   runs-on: ubuntu-latest
+   steps:
+     - name: After HTML Chnage this will Run 
+       run: echo "HTML file has been changed "
+    
+
+
+
+
+ 
