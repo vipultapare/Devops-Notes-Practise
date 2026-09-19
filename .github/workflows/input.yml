@@ -1,0 +1,48 @@
+name: Input WorkFlow
+
+on: 
+ workflow_dispatch:
+   inputs:
+     environment:
+      description: "Select the Environment"
+      default: 'dev'
+      required: true
+      type: choice
+      options:
+         - dev
+         - prod
+
+jobs:
+  pullCode:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull the Code
+        run: echo "Pulling the Code in ${{env.environment}}"
+
+  buildCode:
+    needs: pullCode
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build the Code
+        run: echo "Build the code in ${{env.environment}}"
+
+  testCode:
+    needs: buildCode
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test the code
+        run: echo "Testing the code in ${{env.environment}}"
+  
+  deployCode:
+    needs: testCode
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy the Code to DEV
+        if: ${{ inputs.environment == 'dev' }}
+        run: echo "Deploying the Code to DEV"
+
+      - name: Deploy the Code to PROD
+        if: ${{ inputs.environment == 'prod' }}
+        run: echo "Deploying the Code to PROD"
+    
+    
