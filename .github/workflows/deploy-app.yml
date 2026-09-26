@@ -1,0 +1,25 @@
+name: Deploy using Self-Hosted Runner
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    env:
+      DOCKER_USERNAME: ${{ vars.DOCKERHUB_USER }}
+      IMAGE_TAG: ${{ github.sha }}
+      CONTAINER_NAME: devops_web_app_${{ github.sha }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy with Docker Compose
+        run: |
+          docker compose down || true
+          docker compose up -d --build

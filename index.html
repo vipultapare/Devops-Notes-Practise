@@ -1,1 +1,591 @@
-<h1>Hello this is the Developer</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DevOps Practice Web Application - Simple HTML frontend integrated with Python backend functionality and Docker deployment.">
+  <title>DevOps Practice - Web Application</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0e17;
+      --bg-secondary: #111827;
+      --card-bg: rgba(17, 24, 39, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent-cyan: #06b6d4;
+      --accent-blue: #3b82f6;
+      --accent-indigo: #6366f1;
+      --accent-purple: #8b5cf6;
+      --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.12) 0px, transparent 50%);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* Header */
+    header {
+      margin-bottom: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      padding: 0.4rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #a5b4fc;
+      letter-spacing: 0.03em;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent-emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+      }
+    }
+
+    .server-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #6ee7b7;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-sub {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 650px;
+    }
+
+    /* Grid Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.75rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Card Component */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(99, 102, 241, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #38bdf8;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .card-description {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* Forms & Inputs */
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #cbd5e1;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--accent-indigo), var(--accent-blue));
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.1s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #e2e8f0;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    /* Output Displays */
+    .output-box {
+      background: rgba(10, 14, 23, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      color: #38bdf8;
+      word-break: break-all;
+    }
+
+    .output-box.placeholder {
+      color: #64748b;
+      font-style: italic;
+    }
+
+    /* Telemetry Table */
+    .telemetry-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-size: 0.88rem;
+    }
+
+    .telemetry-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .telemetry-key {
+      color: var(--text-muted);
+    }
+
+    .telemetry-val {
+      font-family: var(--font-mono);
+      color: #e2e8f0;
+      font-weight: 500;
+    }
+
+    /* Code snippet box */
+    .code-block {
+      background: #080c14;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0.5rem;
+      padding: 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: #a5b4fc;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      background: rgba(10, 14, 23, 0.5);
+    }
+
+    .footer-link {
+      color: var(--accent-cyan);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="nav-bar">
+        <div class="logo-badge">
+          <span class="pulse-dot"></span>
+          <span>DevOps Practice Hub</span>
+        </div>
+        <div class="server-status-pill" id="headerStatusBadge">
+          <span>● Backend: Checking...</span>
+        </div>
+      </div>
+
+      <h1 class="hero-title">Python + HTML Web Application</h1>
+      <p class="hero-sub">
+        A clean frontend paired with Python backend functionality (API endpoints, server execution), ready for server deployment via Docker &amp; Docker Compose.
+      </p>
+    </header>
+
+    <!-- Main Grid -->
+    <main class="grid">
+      
+      <!-- Card 1: Greeting Functionality -->
+      <section class="card" id="cardGreeting">
+        <div class="card-header">
+          <div class="card-icon">👋</div>
+          <div>
+            <h2 class="card-title">Python Greeting Service</h2>
+            <p class="card-description">Calls Python's <code>greet(name)</code> backend function via <code>POST /api/greet</code></p>
+          </div>
+        </div>
+
+        <form id="greetForm" onsubmit="handleGreet(event)">
+          <div class="input-group">
+            <label for="nameInput">Your Name</label>
+            <input type="text" id="nameInput" placeholder="e.g. Alex (DevOps Engineer)" autocomplete="off">
+          </div>
+          <div style="margin-top: 1rem;">
+            <button type="submit" class="btn" id="btnGreet" style="width: 100%;">
+              <span>Execute greet()</span> →
+            </button>
+          </div>
+        </form>
+
+        <div class="input-group">
+          <label>Python Backend Response</label>
+          <div class="output-box placeholder" id="greetOutput">Response will appear here...</div>
+        </div>
+      </section>
+
+      <!-- Card 2: Calculation Functionality -->
+      <section class="card" id="cardCalculator">
+        <div class="card-header">
+          <div class="card-icon">⚡</div>
+          <div>
+            <h2 class="card-title">Python Calculation Engine</h2>
+            <p class="card-description">Executes arithmetic logic in <code>app.py</code> via <code>POST /api/add</code></p>
+          </div>
+        </div>
+
+        <form id="calcForm" onsubmit="handleAdd(event)">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <div class="input-group">
+              <label for="numA">Number A</label>
+              <input type="number" id="numA" value="10" step="any" required>
+            </div>
+            <div class="input-group">
+              <label for="numB">Number B</label>
+              <input type="number" id="numB" value="20" step="any" required>
+            </div>
+          </div>
+          <div style="margin-top: 1rem;">
+            <button type="submit" class="btn" id="btnAdd" style="width: 100%;">
+              <span>Calculate add(a, b)</span> →
+            </button>
+          </div>
+        </form>
+
+        <div class="input-group">
+          <label>Calculation Result</label>
+          <div class="output-box placeholder" id="calcOutput">Calculation result will appear here...</div>
+        </div>
+      </section>
+
+      <!-- Card 3: Server Telemetry -->
+      <section class="card" id="cardServerStatus">
+        <div class="card-header">
+          <div class="card-icon">🖥️</div>
+          <div>
+            <h2 class="card-title">Server Telemetry</h2>
+            <p class="card-description">Live container &amp; runtime status from <code>GET /api/status</code></p>
+          </div>
+        </div>
+
+        <div class="telemetry-list">
+          <div class="telemetry-row">
+            <span class="telemetry-key">Status:</span>
+            <span class="telemetry-val" id="serverState" style="color: var(--accent-emerald);">● Checking...</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-key">Engine:</span>
+            <span class="telemetry-val" id="serverEngine">-</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-key">Python Version:</span>
+            <span class="telemetry-val" id="pythonVersion">-</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-key">Operating System:</span>
+            <span class="telemetry-val" id="osPlatform">-</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-key">Server Time:</span>
+            <span class="telemetry-val" id="serverTimestamp">-</span>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-secondary" onclick="fetchStatus()" id="btnRefreshStatus" style="width: 100%;">
+          <span>↻ Refresh Telemetry</span>
+        </button>
+      </section>
+
+      <!-- Card 4: Deployment & DevOps Commands -->
+      <section class="card" id="cardDevOps">
+        <div class="card-header">
+          <div class="card-icon">🚀</div>
+          <div>
+            <h2 class="card-title">Deployment Quick Commands</h2>
+            <p class="card-description">How to run and deploy this application</p>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>1. Run with Docker Compose (Recommended):</label>
+          <div class="code-block">docker compose up -d --build</div>
+        </div>
+
+        <div class="input-group">
+          <label>2. Run directly with Python:</label>
+          <div class="code-block">python3 app.py</div>
+        </div>
+
+        <div class="input-group">
+          <label>3. Direct Docker command:</label>
+          <div class="code-block">docker build -t devops-app . &amp;&amp; docker run -d -p 5000:5000 devops-app</div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>DevOps Notes &amp; Practice Repository &bull; Containerized Python Web Application</p>
+  </footer>
+
+  <script>
+    // Fetch live status on load
+    async function fetchStatus() {
+      const stateEl = document.getElementById('serverState');
+      const engineEl = document.getElementById('serverEngine');
+      const pyVerEl = document.getElementById('pythonVersion');
+      const osEl = document.getElementById('osPlatform');
+      const timeEl = document.getElementById('serverTimestamp');
+      const headerBadge = document.getElementById('headerStatusBadge');
+
+      stateEl.textContent = '● Fetching...';
+      stateEl.style.color = '#facc15';
+
+      try {
+        const res = await fetch('/api/status');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+
+        stateEl.textContent = '● ' + (data.status || 'online').toUpperCase();
+        stateEl.style.color = '#10b981';
+        engineEl.textContent = data.server || 'Python Backend';
+        pyVerEl.textContent = data.python_version || 'Unknown';
+        osEl.textContent = (data.system || '') + ' (' + (data.platform || 'Linux') + ')';
+        timeEl.textContent = data.timestamp || new Date().toLocaleTimeString();
+
+        headerBadge.innerHTML = '<span>● ' + (data.server || 'Python') + ' Online</span>';
+        headerBadge.style.color = '#6ee7b7';
+      } catch (err) {
+        stateEl.textContent = '● OFFLINE / DISCONNECTED';
+        stateEl.style.color = '#f43f5e';
+        headerBadge.innerHTML = '<span>● Disconnected</span>';
+        headerBadge.style.color = '#f43f5e';
+        engineEl.textContent = 'N/A';
+        pyVerEl.textContent = 'N/A';
+        osEl.textContent = 'N/A';
+        timeEl.textContent = 'N/A';
+      }
+    }
+
+    // Call greet endpoint
+    async function handleGreet(e) {
+      e.preventDefault();
+      const name = document.getElementById('nameInput').value;
+      const output = document.getElementById('greetOutput');
+      output.classList.remove('placeholder');
+      output.textContent = 'Calling Python greet()...';
+
+      try {
+        const res = await fetch('/api/greet', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name })
+        });
+        const data = await res.json();
+        output.textContent = data.message || 'No response from Python.';
+      } catch (err) {
+        output.textContent = 'Error connecting to Python backend: ' + err.message;
+      }
+    }
+
+    // Call add endpoint
+    async function handleAdd(e) {
+      e.preventDefault();
+      const a = parseFloat(document.getElementById('numA').value);
+      const b = parseFloat(document.getElementById('numB').value);
+      const output = document.getElementById('calcOutput');
+      output.classList.remove('placeholder');
+      output.textContent = 'Computing in Python...';
+
+      try {
+        const res = await fetch('/api/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ a: a, b: b })
+        });
+        const data = await res.json();
+        if (data.expression) {
+          output.textContent = '✓ ' + data.expression;
+        } else if (data.result !== undefined) {
+          output.textContent = '✓ Result = ' + data.result;
+        } else {
+          output.textContent = 'Error: ' + (data.error || 'Computation failed');
+        }
+      } catch (err) {
+        output.textContent = 'Error connecting to Python backend: ' + err.message;
+      }
+    }
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchStatus();
+    });
+  </script>
+</body>
+</html>
